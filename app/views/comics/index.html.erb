@@ -1,0 +1,149 @@
+<div class="header">
+  <%= image_tag("marvel_logo.png") %>
+  <%= form_with url: comics_path, method: :get do %>
+    <%= text_field_tag :term, params[:term], placeholder: 'Search for characters' %>
+  <%end%>
+</div>
+
+<% if @error.present?%>
+  <div class="alert alert-danger">
+    <%= @error %>
+  </div>
+<% else %>
+  <div class="body">
+    <div class="comics" id="comic_list">
+      <% @comics[:results].each do |comic| %>
+        <div class="comic" style="background-image: url('<%= comic[:thumbnail] %>')" data-comic-id="<%= comic[:id] %>">
+          <img src="<%= image_path('heart_on.png') %>" class="selected-icon">
+          <h2 class="comic-title"><%= comic[:title] %></h2>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="pagination">
+      <div class="previous-page btn btn-default">
+        <% if @comics[:offset] > 0 %>
+          <%= link_to 'Previous Page', comics_path(term: params[:term], page: @comics[:page] - 1) %>
+        <% end %>
+      </div>
+      <div class="next-page btn btn-default">
+        <% if (@comics[:offset] + @comics[:count]) < @comics[:total]%>
+          <%= link_to 'Next Page', comics_path(term: params[:term], page: @comics[:page] + 1) %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<%end%>
+
+<script>
+  document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('comic')) {
+      const clickedComic = event.target;
+      const icon = clickedComic.querySelector('.selected-icon');
+      icon.src = "<%= image_path('heart_on.png') %>";
+      clickedComic.classList.toggle('selected');
+      icon.style.visibility = 'visible';
+    }
+  });
+
+  document.addEventListener('mouseover', function(event) {
+    if (event.target.classList.contains('comic')) {
+      const hoveredComic = event.target;
+      if (hoveredComic.classList.contains('selected')) return;
+      const icon = hoveredComic.querySelector('.selected-icon');
+      icon.src = "<%= image_path('heart_hover.png') %>";
+      icon.style.visibility = 'visible';
+    }
+  });
+
+  document.addEventListener('mouseout', function(event) {
+    if (event.target.classList.contains('comic') && !event.target.classList.contains('selected')) {
+      const hoveredComic = event.target;
+      if (hoveredComic.classList.contains('selected')) return;
+      const icon = hoveredComic.querySelector('.selected-icon');
+      icon.src = "<%= image_path('heart_on.png') %>";
+      icon.style.visibility = 'hidden';
+    }
+  });
+</script>
+
+<style>
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: red;
+  }
+
+  .body {
+    background-color: black;
+  }
+  
+  .comics {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+  }
+
+  .comic {
+    margin-bottom: 20px;
+    width: 216px;
+    height: 324px;
+    background-size: contain;
+    background-position: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .comic.selected {
+    border: 4px solid red;
+  }
+
+  .comic .selected-icon {
+    visibility: hidden;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .comic-title {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    color: black;
+    background-color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .comic:hover .comic-title {
+    opacity: 1;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+
+  .previous-page {
+    margin-right: 10px;
+  }
+
+  .next-page {
+    margin-left: 10px;
+  }
+</style>
+   
