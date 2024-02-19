@@ -8,7 +8,9 @@ Ruby version
 
 - Clone the Repo
 - bundle install
-- rails s
+- rails s # to visit the home page just go to localhost:3000
+- rspec # to run the test suite
+
 
 Implementation
 
