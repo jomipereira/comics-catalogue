@@ -1,24 +1,23 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Instructions to run the project
 
-Things you may want to cover:
+Ruby version 
 
-* Ruby version
+3.3.0
 
-* System dependencies
+- Clone the Repo
+- bundle install
+- rails s
 
-* Configuration
+Implementation
 
-* Database creation
+Created an API client to interact with the Marvel API with a response module
+With any new resource that we implement on the client, a new response parsing should be implemented on the response module
+If there's no need for parsing, further enhancements should be to return the full response from the Marvel API
 
-* Database initialization
+On the view, I didn't follow the sketch like a book
+For further enhancements, I would use hotwire and view components to re-render only the body part of the view and conserve the selected comics on a list that could be evaluated against the new results from the search.
 
-* How to run the test suite
+I'm happy to discuss the choices I've made on this project with you :)
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
