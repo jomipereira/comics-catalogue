@@ -6,8 +6,22 @@ module ComicsService
       @client = client
     end
 
-    def call(comic_params: {})
-      client.comics(params(comic_params:))
+    def call(comic_params: {}, user_id: nil)
+      api_comics = client.comics(params(comic_params:))
+
+      return api_comics unless user_id
+
+      favourite_comics = ListFavouriteComics.new.call(user_id:)
+
+      return api_comics if favourite_comics.empty?
+
+      favourite_comics_ids = favourite_comics.map(&:comic_id)
+
+      api_comics[:results].each do |comic|
+        comic[:favourite] = favourite_comics_ids.include?(comic[:id].to_s)
+      end
+
+      api_comics
     rescue MarvelAPI::V1::Response::Error => e
       raise e
     end

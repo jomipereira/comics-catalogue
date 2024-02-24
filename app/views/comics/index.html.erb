@@ -13,7 +13,7 @@
   <div class="body">
     <div class="comics" id="comic_list">
       <% @comics[:results].each do |comic| %>
-        <div class="comic" style="background-image: url('<%= comic[:thumbnail] %>')" data-comic-id="<%= comic[:id] %>">
+        <div class="comic<%= comic[:favourite] ? ' selected' : ''%>" style="background-image: url('<%= comic[:thumbnail] %>')" data-comic-id="<%= comic[:id] %>">
           <img src="<%= image_path('heart_on.png') %>" class="selected-icon">
           <h2 class="comic-title"><%= comic[:title] %></h2>
         </div>
@@ -36,6 +36,11 @@
 <%end%>
 
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (document.cookie.split(";").some((item) => item.trim().startsWith("user_id="))) return;
+    document.cookie = `user_id=${crypto.randomUUID()}`
+  });
+
   document.addEventListener('click', function(event) {
     if (event.target.classList.contains('comic')) {
       const clickedComic = event.target;
@@ -43,6 +48,19 @@
       icon.src = "<%= image_path('heart_on.png') %>";
       clickedComic.classList.toggle('selected');
       icon.style.visibility = 'visible';
+      fetch("<%=set_favourite_comics_path %>", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({
+          comic: {
+            comic_id: clickedComic.dataset.comicId,
+            user_id: document.cookie.split(';').find((cookie) => cookie.trim().startsWith('user_id')).split('=')[1]
+          }
+        })
+      });
     }
   });
 
@@ -101,6 +119,10 @@
 
   .comic.selected {
     border: 4px solid red;
+
+    img {
+      visibility: visible;
+    }
   }
 
   .comic .selected-icon {

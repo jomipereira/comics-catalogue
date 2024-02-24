@@ -4,7 +4,7 @@ require 'rails_helper'
 
 require_relative '../../app/apis/marvel_api/v1/error'
 
-RSpec.describe ComicsController do
+RSpec.describe ComicsController, type: :controller do
   let(:api_client) { instance_double('MarvelAPI::V1::Client') }
   let!(:freeze_time) { Time.now }
   before do
@@ -59,6 +59,44 @@ RSpec.describe ComicsController do
       it 'renders the error message' do
         get :index
         expect(response.body).to eq('500 Internal Server Error')
+      end
+    end
+  end
+
+  describe 'POST #set_favourite' do
+    let(:api_client) { instance_double('MarvelAPI::V1::Client') }
+    let!(:freeze_time) { Time.now }
+
+    before do
+      allow(MarvelAPI::V1::Client).to receive(:new).and_return(api_client)
+    end
+
+    context 'when the comic is successfully set as favorite' do
+      let(:comic_params) { { id: '5678' } }
+
+      before do
+        allow(ComicsService::SetFavourite).to receive(:new).and_return(instance_double('ComicsService::SetFavourite', call: true))
+      end
+
+      it 'returns a successful response' do
+        post :set_favourite, params: comic_params
+        expect(response).to be_successful
+      end
+    end
+
+    context 'when the comic fails to be set as favorite' do
+      let(:set_favourite) { instance_double('ComicsService::SetFavourite') }
+      let(:comic_params) { { comic_id: '5678' } }
+      let(:error_message) { 'Invalid comic' }
+
+      before do
+        allow(ComicsService::SetFavourite).to receive(:new).and_return(set_favourite)
+        allow(set_favourite).to receive(:call).and_raise(ActiveRecord::RecordInvalid)
+      end
+
+      it 'returns a 422 status' do
+        post :set_favourite, params: comic_params
+        expect(response).to have_http_status(422)
       end
     end
   end
