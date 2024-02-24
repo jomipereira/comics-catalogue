@@ -18,7 +18,7 @@ RSpec.describe ComicsController do
           {
             results: [
               {
-                issn: '1234-5678',
+                id: '5678',
                 title: 'Avengers #1',
                 thumbnail: {
                   path: 'http://i.annihil.us/u/prod/marvel/i/mgd/2/50/537bc703d31da',

@@ -23,7 +23,7 @@ RSpec.describe MarvelAPI::V1::Response do
     let(:results) do
       [
         {
-          issn: '1234-5678',
+          id: '5678',
           title: 'Avengers #1',
           thumbnail: {
             path: 'http://i.annihil.us/u/prod/marvel/i/mgd/2/50/537bc703d31da',
@@ -50,7 +50,7 @@ RSpec.describe MarvelAPI::V1::Response do
             total: 1,
             results: [
               {
-                issn: '1234-5678',
+                id: '5678',
                 title: 'Avengers #1',
                 thumbnail: 'http://i.annihil.us/u/prod/marvel/i/mgd/2/50/537bc703d31da/portrait_incredible.jpg'
               }

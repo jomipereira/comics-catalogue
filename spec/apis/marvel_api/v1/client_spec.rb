@@ -22,7 +22,7 @@ RSpec.describe MarvelAPI::V1::Client do
           count: 1,
           results: [
             {
-              issn: '1234-5678',
+              id: '5678',
               title: 'Marvel Previews (2017)',
               thumbnail: {
                 path: 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available',
@@ -67,7 +67,7 @@ RSpec.describe MarvelAPI::V1::Client do
             count: 1,
             results: [
               {
-                issn: '1234-5678',
+                id: '5678',
                 title: 'Marvel Previews (2017)',
                 thumbnail: 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_incredible.jpg'
               }

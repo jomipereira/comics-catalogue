@@ -18,7 +18,7 @@ module MarvelAPI
 
       def self.comic_response(comic)
         {
-          issn: comic[:issn],
+          id: comic[:id],
           title: comic[:title],
           thumbnail: "#{comic[:thumbnail][:path]}/#{IMAGE_SIZE}.#{comic[:thumbnail][:extension]}"
         }
