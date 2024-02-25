@@ -72,7 +72,7 @@ RSpec.describe ComicsController, type: :controller do
     end
 
     context 'when the comic is successfully set as favorite' do
-      let(:comic_params) { { id: '5678' } }
+      let(:comic_params) { { comic: { comic_id: '22204', user_id: SecureRandom.uuid } } }
 
       before do
         allow(ComicsService::SetFavourite).to receive(:new).and_return(instance_double('ComicsService::SetFavourite', call: true))
@@ -86,7 +86,7 @@ RSpec.describe ComicsController, type: :controller do
 
     context 'when the comic fails to be set as favorite' do
       let(:set_favourite) { instance_double('ComicsService::SetFavourite') }
-      let(:comic_params) { { comic_id: '5678' } }
+      let(:comic_params) { { comic: { comic_id: '22204' } } }
       let(:error_message) { 'Invalid comic' }
 
       before do

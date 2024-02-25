@@ -10,7 +10,7 @@ class ComicsController < ApplicationController
   def set_favourite
     @favourite = ComicsService::SetFavourite.new.call(comic_params:)
   rescue ActiveRecord::RecordInvalid => e
-    render status: 422, body: e.record.errors
+    render status: 422, body: 'Invalid comic'
   end
 
   private
